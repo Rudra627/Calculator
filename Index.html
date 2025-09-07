@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculator</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #000;
+    }
+
+    .calculator {
+      width: 90%;
+      max-width: 400px;
+      background: #000;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    }
+
+    .display {
+      background: #000;
+      color: #fff;
+      font-size: 2.5rem;
+      text-align: right;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      word-wrap: break-word;
+      min-height: 60px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+
+    button {
+      border: none;
+      border-radius: 50%;
+      padding: 20px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    /* button colors */
+    .operator {
+      background: #f39c12;
+      color: #fff;
+    }
+    .operator:hover {
+      background: #d35400;
+    }
+
+    .function {
+      background: #a5a5a5;
+      color: #000;
+    }
+    .function:hover {
+      background: #7f8c8d;
+    }
+
+    .number {
+      background: #333;
+      color: #fff;
+    }
+    .number:hover {
+      background: #555;
+    }
+
+    .span-2 {
+      grid-column: span 2;
+      border-radius: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button class="function" onclick="clearDisplay()">AC</button>
+      <button class="function" onclick="toggleSign()">+/-</button>
+      <button class="function" onclick="percent()">%</button>
+      <button class="operator" onclick="appendOperator('/')">÷</button>
+
+      <button class="number" onclick="appendNumber(7)">7</button>
+      <button class="number" onclick="appendNumber(8)">8</button>
+      <button class="number" onclick="appendNumber(9)">9</button>
+      <button class="operator" onclick="appendOperator('*')">×</button>
+
+      <button class="number" onclick="appendNumber(4)">4</button>
+      <button class="number" onclick="appendNumber(5)">5</button>
+      <button class="number" onclick="appendNumber(6)">6</button>
+      <button class="operator" onclick="appendOperator('-')">−</button>
+
+      <button class="number" onclick="appendNumber(1)">1</button>
+      <button class="number" onclick="appendNumber(2)">2</button>
+      <button class="number" onclick="appendNumber(3)">3</button>
+      <button class="operator" onclick="appendOperator('+')">+</button>
+
+      <button class="number span-2" onclick="appendNumber(0)">0</button>
+      <button class="number" onclick="appendDot()">.</button>
+      <button class="operator" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById("display");
+    let currentInput = "0";
+
+    function updateDisplay() {
+      display.textContent = currentInput;
+    }
+
+    function clearDisplay() {
+      currentInput = "0";
+      updateDisplay();
+    }
+
+    function appendNumber(number) {
+      if (currentInput === "0") {
+        currentInput = number.toString();
+      } else {
+        currentInput += number;
+      }
+      updateDisplay();
+    }
+
+    function appendOperator(operator) {
+      if (!/[+\-*/]$/.test(currentInput)) {
+        currentInput += operator;
+      }
+      updateDisplay();
+    }
+
+    function appendDot() {
+      let parts = currentInput.split(/[\+\-\*\/]/);
+      let lastPart = parts[parts.length - 1];
+      if (!lastPart.includes(".")) {
+        currentInput += ".";
+      }
+      updateDisplay();
+    }
+
+    function calculate() {
+      try {
+        currentInput = eval(currentInput).toString();
+      } catch {
+        currentInput = "Error";
+      }
+      updateDisplay();
+    }
+
+    function toggleSign() {
+      try {
+        currentInput = (parseFloat(currentInput) * -1).toString();
+        updateDisplay();
+      } catch {
+        currentInput = "Error";
+        updateDisplay();
+      }
+    }
+
+    function percent() {
+      try {
+        currentInput = (parseFloat(currentInput) / 100).toString();
+        updateDisplay();
+      } catch {
+        currentInput = "Error";
+        updateDisplay();
+      }
+    }
+  </script>
+</body>
+</html>
